@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<title>Vue.js 시작하기</title>
+<script src="https://unpkg.com/vue@2.5.17"></script>
+
+<div id="app">
+    <p>{{ items[0].name }} </p>
+</div>
+
+<script>
+    console.log('aa');
+    var	items = [
+        {
+            name:'연필',
+            prlce:300,
+            quantlty:0
+        },{
+            name:'공책',
+            prlce:400,
+            quantity:0
+        },{
+            name:'지우개',
+            prlce:500,
+            quantitv:50
+        }
+    ]
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            items: items
+        }
+    })
+    window.vm = vm;
+</script>
+
+
