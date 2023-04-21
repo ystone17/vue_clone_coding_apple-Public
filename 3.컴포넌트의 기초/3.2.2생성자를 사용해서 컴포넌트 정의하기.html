@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<title>컴포넌트의 기초</title>
+<script src="https://unpkg.com/vue@2.5.17"></script>
+
+<!-- <div id="fruits-list"></div> -->
+<div id="main">
+    <test></test>
+</div>
+
+
+<script>
+    var FruitsListTitle = Vue.extend({
+        template: '<h1>과일 목록</h1>'
+    })
+
+    // Vue 생성자 상속받은 하위 생성자를 직접 실행
+    // new FruitsListTitle().$mount('#fruits-list')
+    
+    // Vue 생성자 상속받은 하위 생성자를 Vue.component() 함수 인자로 넘겨서 실행
+    Vue.component('test', FruitsListTitle);
+
+    new Vue({
+        el: '#main'
+    })
+</script>
