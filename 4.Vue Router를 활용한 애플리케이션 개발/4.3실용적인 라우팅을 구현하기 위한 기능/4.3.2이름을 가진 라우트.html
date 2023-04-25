@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue.js SPA 예제 애플리케이션</title>
+    </head>
+
+    <body>
+        <div id="app">
+            <!-- to 프로퍼티에 링크 대상을 지정 -->
+            <!-- <router-link> 는 기본적으로 '<a> 태그로 렌더링 된다.' -->
+            <router-link :to="{ name: 'user', params: { userId: 123 }}">최상위 페이지</router-link>
+            <router-view></router-view>
+        </div>
+        <!-- Vue.js와 Vue Router 로딩 -->
+        <html>
+        <script src="https://unpkg.com/vue@2.5.17"></script>
+        <script src="https://unpkg.com/vue-router@3.0.1"></script>
+        <script>
+        var router = new VueRouter({
+            routes: [
+                // 패턴 매칭에 사용되는 패턴은 콜론으로 시작
+                {
+                    path: '/user/:userId',
+                    name: 'user',
+                    component: {
+                        template: '<div>사용자 ID는 {{ $route.params.userId }}</div>'
+                    }
+                }
+            ]
+        })
+
+        var app = new Vue({
+            router: router
+        }).$mount('#app')
+        </script>
+    </body>
+</html>
