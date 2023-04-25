@@ -1,0 +1,57 @@
+<script>
+    var router = new VueRouter({
+        
+    })
+
+    //전역 훅 함수
+    router.beforeEach((to, from, next) => {
+        // to and from are both route objects. must call `next`.
+        if (to.path === '/users') {
+            next('/top');
+        } else {
+            newt();
+        }
+    })
+
+    //라우트 단위 훅 함수
+    var router = new VueRouter({
+        routes: [{
+            path: '/users',
+            component: userList,
+            beforeEnter: function(to, from, next) {
+                // /users?redirect=true 로 접근할 때만 top으로 리다이렉트하는 훅 함수를 추가함.
+                if (to.query.redirect === 'true') {
+                    next('/top');
+                } else {
+                    next();
+                }
+            }
+        }]
+    })
+
+    //컴포넌트 내 훅 함수 
+    var userList = {
+        template: '#user-list',
+        data: function() {
+            return {
+                users: function() {
+                    return []
+                },
+                error: null
+            }
+        },
+        beforeRouteEnter: function(to, from, next) {
+            getusers((function(err, users) {
+                if (err) {
+                    this.error = err.toString();
+                } else {
+                    next(function(vm) {
+                        vm.users = users
+                    })
+                }
+            }).bind(this))
+        }
+    }
+
+
+</script>
