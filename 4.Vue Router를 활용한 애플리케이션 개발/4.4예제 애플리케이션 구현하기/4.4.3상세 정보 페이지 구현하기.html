@@ -26,16 +26,42 @@
         </div>
         <!-- users 의 로딩이 끝나면 각 사용장의 이름을 표시 -->
         <div v-for="user in users" :key="user.id">
-            <h2>{{ user.name }}</h2>
+            <router-link :to="{ path: '/users/' + user.id }">{{ user.name }}</router-link>
         </div>
     </div>
 </script>
 
+<script type="text/x-template" id="user-detail">
+    <div>
+        <div class="loading" v-if="loading">로딩 중...</div>
+        <div v-if="error" class="error">
+            {{ error }}
+        </div>
+        <!-- users 의 로딩이 끝나면 각 사용장의 이름을 표시 -->
+        <div v-if="user">
+            <h2>{{ user.name }}</h2>
+            <p>{{ user.description }}</p>
+        </div>
+    </div>
+</script>
 <!-- ... 여러 개의 템플릿 정의가 반복됨 ... -->
 
 
 <!-- 임의의 JS 구현 -->
 <script>
+    var userData = [
+        {
+            id: 1,
+            name: 'kim min jae',
+            description: '나폴리 수비수!'
+        },
+        {
+            id: 2,
+            name: 'son heung min',
+            description: '토트넘 공격수!'
+        }
+    ]
+
     var getUsers = function(callback) {
         setTimeout(function() {
             callback(null, [
@@ -49,6 +75,51 @@
                 }
             ])
         }, 1000)
+    }
+
+    var getUser = function(userId, callback) {
+        setTimeout(function() {
+            var filteredUsers = userData.filter(function(user) {
+                return user.id === parseInt(userId, 10)
+            })
+
+            callback(null, filteredUsers && filteredUsers[0])
+        }, 1000)
+    }
+
+    var UserDetail = {
+        template: '#user-detail',
+        data: function() {
+            return {
+                loading: false,
+                user: null,
+                error: null
+            }
+        },
+
+        created: function() {
+            this.fetchData()
+        },
+
+        watch: {
+            '$route': 'fetchData'
+        },
+
+        methods: {
+            fetchData: function() {
+                this.loading = true;
+
+                getUser(this.$route.params.userId, (function(err, user) {
+                    this.loading = false
+                    
+                    if (err) {
+                        this.error = err.toString()
+                    } else {
+                        this.user = user
+                    }
+                }).bind(this))
+            }
+        }
     }
 
     var UserList = {
@@ -97,6 +168,10 @@
             {
                 path: '/users',
                 component: UserList
+            },
+            {
+                path: '/users/:userId',
+                component: UserDetail
             }
         ]
     })
