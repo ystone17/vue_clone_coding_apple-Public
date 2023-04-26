@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<title>Vue.js SPA 예제 애플리케이션</title>
+<style>
+    /* 임의의 CSS, 여기서는 생략함 */
+</style>
+<div id="app">
+    <nav>
+        <!-- router link 를 이용한 내비게이션 정의 -->
+        <router-link to="/top">최상위 페이지</router-link>
+        <router-link to="/users">사용자 목록 페이지</router-link>
+    </nav>
+    <router-view></router-view>
+</div>
+
+<!-- Vue.js 와 Vue Router 로딩 -->
+<script src="https://unpkg.com/vue@2.4.2/dist/vue.min.js"></script>
+<script src="https://unpkg.com/vue-router@2.7.0/dist/vue-router.min.js"></script>
+
+<!-- 앞으로 작성할 부분 시작 -->
+<!-- 필요한 컴포넌트의 템플릿 정의 -->
+<script type="text/x-template" id="user-list">
+    <div>사용자 목록 페이지입니다.</div>
+</script>
+
+<!-- ... 여러 개의 템플릿 정의가 반복됨 ... -->
+
+
+<!-- 임의의 JS 구현 -->
+<script>
+    var UserList = {
+        template: '#user-list',
+    }
+
+    var router = new VueRouter({
+        routes: [
+            {
+                path: '/top',
+                component: {
+                    template: '<div>최상위 페이지입니다.</div>'
+                }
+            },
+            {
+                path: '/users',
+                component: UserList
+            }
+        ]
+    })
+
+    var app = new Vue({
+        router: router
+    }).$mount('#app')
+</script>
+<!-- 앞으로 작성할 부분 끝 -->
+
