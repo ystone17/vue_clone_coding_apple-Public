@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<title>Vue.js SPA 예제 애플리케이션</title>
+<style>
+    /* 임의의 CSS, 여기서는 생략함 */
+</style>
+<div id="app">
+    <nav>
+        <!-- router link 를 이용한 내비게이션 정의 -->
+        <router-link to="/top">최상위 페이지</router-link>
+        <router-link to="/users">사용자 목록 페이지</router-link>
+        <router-link to="/users/new">사용자 등록 페이지</router-link>
+    </nav>
+    <router-view></router-view>
+</div>
+
+<!-- Vue.js 와 Vue Router 로딩 -->
+<script src="https://unpkg.com/vue@2.4.2/dist/vue.min.js"></script>
+<script src="https://unpkg.com/vue-router@2.7.0/dist/vue-router.min.js"></script>
+
+<!-- 앞으로 작성할 부분 시작 -->
+<!-- 필요한 컴포넌트의 템플릿 정의 -->
+<script type="text/x-template" id="user-list">
+    <div>
+        <div class="loading" v-if="loading">로딩 중...</div>
+        <div v-if="error" class="error">
+            {{ error }}
+        </div>
+        <!-- users 의 로딩이 끝나면 각 사용장의 이름을 표시 -->
+        <div v-for="user in users" :key="user.id">
+            <router-link :to="{ path: '/users/' + user.id }">{{ user.name }}</router-link>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="user-detail">
+    <div>
+        <div class="loading" v-if="loading">로딩 중...</div>
+        <div v-if="error" class="error">
+            {{ error }}
+        </div>
+        <!-- users 의 로딩이 끝나면 각 사용장의 이름을 표시 -->
+        <div v-if="user">
+            <h2>{{ user.name }}</h2>
+            <p>{{ user.description }}</p>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-template" id="user-create">
+    <div>
+        <div class="sending" v-if="sending">Sending...</div>
+        <div>
+            <h2>신규 사용자 등록</h2>
+            <div>
+                <label>이름: </label>
+                <input type="text" v-model="user.name">
+            </div>
+            <div>
+                <label>설명: </label>
+                <textarea v-model="user.description"></textarea>
+            </div>
+            <div v-if="error" class="error">
+                {{ error }}
+            </div>
+            <div>
+                <input type="button" @click="createUser" value="등록">
+            </div>
+        </div>
+    </div>
+</script>
+<!-- ... 여러 개의 템플릿 정의가 반복됨 ... -->
+
+
+<!-- 임의의 JS 구현 -->
+<script>
+    var postUser = function(params, callback) {
+        setTimeout(function() {
+            params.id = userData.length + 1
+            userData.push(params)
+            callback(null, params)
+        }, 1000)
+    }
+
+    var UserCreate = {
+        template: '#user-create',
+        data: function() {
+            return {
+                sending: false,
+                user: this.defaultUser(),
+                error: null
+            }
+        },
+        created: function() {},
+        methods: {
+            defaultUser: function() {
+                return {
+                    id: '',
+                    name: '',
+                    description: ''
+                }
+            },
+            createUser: function() {
+                if (this.user.name.trim() === '') {
+                    this.error = 'Name은 필수입니다.'
+                    return
+                }
+
+                if (this.user.description.trim() === '') {
+                    this.error = 'Description은 필수입니다.'
+                    return
+                }
+
+                postUser(this.user, (function(err, user) {
+                    this.sending = false
+                    if (err) {
+                        this.error = err.toString()
+                    } else {
+                        this.error = null
+                        this.user = this.defaultUser()
+                        alert('신규 사용자가 등록되었습니다')
+                        this.$router.push('/users')
+                    }
+                }).bind(this))
+            }
+        }
+    }
+
+    var userData = [
+        {
+            id: 1,
+            name: 'kim min jae',
+            description: '나폴리 수비수!'
+        },
+        {
+            id: 2,
+            name: 'son heung min',
+            description: '토트넘 공격수!'
+        }
+    ]
+
+    var getUsers = function(callback) {
+        setTimeout(function() {
+            callback(null, userData)
+        }, 1000)
+    }
+
+    var getUser = function(userId, callback) {
+        setTimeout(function() {
+            var filteredUsers = userData.filter(function(user) {
+                return user.id === parseInt(userId, 10)
+            })
+
+            callback(null, filteredUsers && filteredUsers[0])
+        }, 1000)
+    }
+
+    var UserDetail = {
+        template: '#user-detail',
+        data: function() {
+            return {
+                loading: false,
+                user: null,
+                error: null
+            }
+        },
+
+        created: function() {
+            this.fetchData()
+        },
+
+        watch: {
+            '$route': 'fetchData'
+        },
+
+        methods: {
+            fetchData: function() {
+                this.loading = true;
+
+                getUser(this.$route.params.userId, (function(err, user) {
+                    this.loading = false
+                    
+                    if (err) {
+                        this.error = err.toString()
+                    } else {
+                        this.user = user
+                    }
+                }).bind(this))
+            }
+        }
+    }
+
+    var UserList = {
+        template: '#user-list',
+        data: function() {
+            return {
+                loading: false,
+                users: function() { return [] },
+                error: null
+            }
+        },
+
+        created: function() {
+            this.fetchData()
+        },
+
+        watch: {
+            '$route': 'fetchData'
+        },
+
+        methods: {
+            fetchData: function() {
+                this.loading = true;
+
+                getUsers((function(err, users) {
+                    this.loading = false
+                    
+                    if (err) {
+                        this.error = err.toString()
+                    } else {
+                        this.users = users
+                    }
+                }).bind(this))
+            }
+        }
+    }
+
+    var router = new VueRouter({
+        routes: [
+            {
+                path: '/top',
+                component: {
+                    template: '<div>최상위 페이지입니다.</div>'
+                }
+            },
+            {
+                path: '/users',
+                component: UserList
+            },
+            {
+                path: '/users/new',
+                component: UserCreate
+            },
+            {
+                path: '/users/:userId',
+                component: UserDetail
+            }
+        ]
+    })
+
+    var app = new Vue({
+        router: router
+    }).$mount('#app')
+</script>
+<!-- 앞으로 작성할 부분 끝 -->
+
