@@ -1,0 +1,21 @@
+<script>
+    // 리다이렉션
+    const router = new VueRouter({
+        routes: [
+            { path: '/a', redirect: 'b'},
+            { path: '/b', component: B},
+            { path: '/notfound', component: NotFound},
+            { path: '*', redirect: '/notfound'},
+        ]
+    })
+
+    // 앨리어싱
+    // /b 로 접근시 url 변경 없이 A 컴포넌트를 보여줌
+    // 여러 개 가능
+    const routerAliasing = new VueRouter({
+        routes: [
+            { path: '/a', component: A, alias: '/b'},
+            { path: '/b', component: B, alias: ['c', 'd']},
+        ]
+    })
+</script>
