@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<div id="app">
+    <router-link to="/user/123">user</router-link>
+    <router-view></router-view>
+</div>
+
+
+<script src="https://unpkg.com/vue@2.4.2/dist/vue.min.js"></script>
+<script src="https://unpkg.com/vue-router@2.7.0/dist/vue-router.min.js"></script>
+
+
+<script>
+    var User = {
+        template: '<div class="user">'+
+                '<h2>사용자 ID는 {{ $route.params.userId }}입니다.</h2>'+
+                '<router-link :to="\'/user/\' + $route.params.userId + \'/profile\'">사용자 프로필 보기</router-link>'+
+                '<router-link :to="\'/user/\' + $route.params.userId + \'/posts\'">사용자의 글 모음 보기</router-link>'+
+                '<router-view></router-view>'+
+            '</div>'
+    }
+
+
+
+    var UserProfile = {
+        template: '<div class="user-profile">'+
+                '<h3>사용자 {{ $route.params.userId }}의 프로필 페이지입니다.</h3>'+
+            '</div>'
+    }
+
+    var UserPosts = {
+        template: '<div class="user-posts">'+
+                '<h3>사용자 {{ $route.params.userId }}의 글 모음 페이지입니다.</h3>'+
+            '</div>'
+    }
+
+    var router = new VueRouter({
+        routes: [
+            {
+                path: '/user/:userId',
+                name: 'user',
+                component: User,
+                children: [
+                    {
+                        path: 'profile',
+                        component: UserProfile
+                    },
+                    {
+                        path: 'posts',
+                        component: UserPosts
+                    }
+                ]
+            }
+        ]
+        
+    })
+
+    new Vue({
+        el: '#app',
+        router: router
+    })
+
+    // var app = new Vue({
+    //     router: router
+    // }).$mount('#app')
+</script>
