@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<title>Vue app</title>
+<script src="https://unpkg.com/vue@2.5.17"></script>
+
+<div id="app">
+    <Todo-list :todos="todos">
+        <!-- slot-scope 에 적은 이름을 가진 객체에 child 컴포넌트에서 전달한 데이터를 받는다.
+        <li slot-scope="dataFromChild" v-if="dataFromChild.todo.isCompleted">
+            {{ dataFromChild.todo.text }}
+        </li> 
+        -->
+        <!-- 분할 대입 법을 이용해서 todo라는 객체에 바로 받아버린다. -->
+        <li slot-scope="{ todo }" v-if="todo.isCompleted">
+            {{ todo.text }}
+        </li>
+    </Todo-list>
+</div>
+<script src="5.2.3-1 범위를 가지는 슬롯.js"></script>
