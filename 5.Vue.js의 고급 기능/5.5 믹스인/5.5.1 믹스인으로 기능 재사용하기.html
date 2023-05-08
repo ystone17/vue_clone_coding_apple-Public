@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<title>Vue app</title>
+<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+<script src="https://unpkg.com/vue@2.5.17"></script>
+
+<div id="app">
+    <icon-share-button></icon-share-button>
+    <text-share-button></text-share-button>
+</div>
+
+<script>
+    var Sharable = {
+        // data 프로퍼티와 created 같은 훅이 mixin을 사용한 곳과 통합된다.
+        data: function() {
+            return {
+                _isProcessing: false
+            }
+        },
+        created: function() {
+            console.log('Sharable 믹스인의 훅이 호출됨.')
+        },
+        methods: {
+            share: function() {
+                if (this._isProcessing) {
+                    return
+                }
+                if (!window.confirm('공유하시겠습니까?')) {
+                    return
+                }
+                this._isProcessing = true
+
+                setTimeout(() => {
+                    window.alert('공유되었습니다.')
+                    this._isProcessing = false
+                }, 300)
+            }
+        }
+    }
+
+    var IconShareButton = {
+        mixins: [Sharable],
+        created: function() {
+            console.log('IconShareButton 믹스인의 훅이 호출됨.')
+        },
+        template: 
+        `
+            <button @click="share"><i class="fas fa-share-square"></i></button>
+        `,
+        // 공통기능이기 때문에 mixin 으로 추출한다.
+        // date: function() {
+        //     return {
+        //         _isProcessing: false
+        //     }
+        // },
+        methods: {
+            // mixin 과 같은 같은 프로퍼티를 갖는 경우! =? 컴포넌트가 믹스인보다 우선시 된다.
+            share: function() {
+                window.alert('컴포넌트로부터 공유되었습니다.')
+            }
+        }
+    }
+
+    var TextShareButton = {
+        mixins: [Sharable],
+        created: function() {
+            console.log('TextShareButton 믹스인의 훅이 호출됨.')
+        },
+        template: 
+        `
+            <button @click="share">{{ buttonLabel }}</button>
+        `,
+        data: function() {
+            return {
+                buttonLabel: '공유하기',
+                _isProcessing: false
+            }
+        },
+        // 공통기능이기 때문에 mixin 으로 추출한다.
+        // methods: {
+        //     share: function() {
+        //         if (this._isProcessing) {
+        //             return
+        //         }
+        //         if (!window.confirm('공유하시겠습니까?')) {
+        //             return
+        //         }
+        //         this._isProcessing = true
+
+        //         setTimeout(() => {
+        //             window.alert('공유되었습니다.')
+        //             this._isProcessing = false
+        //         }, 300)
+        //     }
+        // }
+    }
+
+    new Vue({
+        el: '#app',
+        components: {
+            IconShareButton,
+            TextShareButton
+        }
+    })
+
+</script>
