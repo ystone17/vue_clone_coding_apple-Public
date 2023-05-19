@@ -7,14 +7,36 @@
         {{ task.name }}
       </li>
     </ul>
+
+    <form v-on:submit.prevent="addTask">
+      <input type="text" v-model="newTaskName" placeholder="새 태스크">
+    </form>
   </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      newTaskName: ''
+    }
+  }, 
   computed: {
     tasks() {
       return this.$store.state.tasks
+    }
+  },
+  methods: {
+    addTask() {
+      this.$store.commit('addTask', {
+        name: this.newTaskName
+      })
+      this.newTaskName = ''
+    },
+    toggleTaskStatus(task) {
+      this.$store.commit('toggleTaskStatus', {
+        id: task.id
+      })
     }
   }
 }
