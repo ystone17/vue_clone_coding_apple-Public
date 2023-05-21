@@ -40,6 +40,10 @@
       </li>
     </ul>
 
+    <h2>저장 및 복원</h2>
+    <button type="button" @click="save">저장</button>
+    <button type="button" @click="restore">복원</button>
+
   </div>
 </template>
 
@@ -91,6 +95,12 @@ export default {
       this.$store.commit('changeFilter', {
         filter: labelId
       })
+    },
+    save() {
+      this.$store.dispatch('save')
+    },
+    restore() {
+      this.$store.dispatch('restore')
     }
   }
 }
