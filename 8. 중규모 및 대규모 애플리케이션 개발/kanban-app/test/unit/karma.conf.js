@@ -3,6 +3,9 @@
 // we are also using it with karma-webpack
 //   https://github.com/webpack/karma-webpack
 
+// const puppeteer = require('puppeteer')
+// process.env.CHROME_BIN = puppeteer.executablePath()
+
 var webpackConfig = require('../../build/webpack.test.conf')
 
 module.exports = function karmaConfig (config) {
@@ -11,7 +14,7 @@ module.exports = function karmaConfig (config) {
     // 1. install corresponding karma launcher
     //    http://karma-runner.github.io/0.13/config/browsers.html
     // 2. add it to the `browsers` array below.
-    browsers: ['PhantomJS'],
+    browsers: ['ChromeHeadless'],
     frameworks: ['mocha', 'sinon-chai', 'phantomjs-shim'],
     reporters: ['spec', 'coverage'],
     files: [
