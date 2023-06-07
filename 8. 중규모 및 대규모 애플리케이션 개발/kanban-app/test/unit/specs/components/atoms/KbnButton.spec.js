@@ -41,7 +41,7 @@ describe('KbnButton', () => {
       describe('기본값', () => {
         it('disabled 속성이 부여되지 않음', () => {
           const button = mount(KbnButton)
-          expect(button.attributes().disabled).to.be.an('undefind')
+          expect(button.attributes().disabled).to.be.an('undefined')
         })
       })
 
@@ -59,7 +59,7 @@ describe('KbnButton', () => {
       describe('false', () => {
         it('disabled 속성이 부여되지 않음', () => {
           const button = mount(KbnButton)
-          expect(button.attributes().disabled).to.be.an('undefind')
+          expect(button.attributes().disabled).to.be.an('undefined')
         })
       })
     })
@@ -69,7 +69,7 @@ describe('KbnButton', () => {
     describe('click', () => {
       it('일어나지 않음', () => {
         const button = mount(KbnButton)
-        button.trigger('click')
+        button.vm.$emit('click')
         expect(button.emitted().click.length).to.equal(1)
       })
     })
