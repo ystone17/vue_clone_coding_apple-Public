@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import KbnLoginForm from '@/components/molecules/KbnLoginForm.vue'
 
 describe('KbnLoginForm', () => {
@@ -6,7 +6,7 @@ describe('KbnLoginForm', () => {
     describe('validation', () => {
       let loginForm
       beforeEach(done => {
-        loginForm = mount(KbnLoginForm, {
+        loginForm = shallowMount(KbnLoginForm, {
           propsData: {
             onLogin: () => {}
           }
@@ -82,7 +82,7 @@ describe('KbnLoginForm', () => {
     describe('valid', () => {
       let loginForm
       beforeEach(done => {
-        loginForm = mount(KbnLoginForm, {
+        loginForm = shallowMount(KbnLoginForm, {
           propsData: {
             onLogin: () => {}
           }
@@ -114,7 +114,7 @@ describe('KbnLoginForm', () => {
     describe('disableLoginAction', () => {
       let loginForm
       beforeEach(done => {
-        loginForm = mount(KbnLoginForm, {
+        loginForm = shallowMount(KbnLoginForm, {
           propsData: {
             onLogin: () => {}
           }
@@ -159,7 +159,7 @@ describe('KbnLoginForm', () => {
       let onloginStub
       beforeEach(done => {
         onloginStub = sinon.stub()
-        loginForm = mount(KbnLoginForm, {
+        loginForm = shallowMount(KbnLoginForm, {
           propsData: {
             onlogin: onloginStub
           }
