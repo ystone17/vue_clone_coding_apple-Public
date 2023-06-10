@@ -2,13 +2,13 @@
   <form novalidate>
     <div class="form-item">
       <label for="email">이메일 주소</label>
-        <input
-          id="email"
-          v-model="email"
-          type="text"
-          autocomplete="off"
-          placeholder="예: kanban@domain.com"
-          @focus="resetError">
+      <input
+        id="email"
+        v-model="email"
+        type="text"
+        autocomplete="off"
+        placeholder="예: kanban@domain.com"
+        @focus="resetError">
       <ul class="validation-errors">
         <li v-if="!validation.email.format">이메일 주소 형식에 어긋납니다</li>
         <li v-if="!validation.email.required">이메일 주소가 입력되지 않았습니다</li>
@@ -16,13 +16,13 @@
     </div>
     <div class="form-item">
       <label for="password">패스워드</label>
-        <input
-          id="password"
-          v-model="password"
-          type="password"
-          autocomplete="off"
-          placeholder="예: xxxxxxxx"
-          @focus="resetError">
+      <input
+        id="password"
+        v-model="password"
+        type="password"
+        autocomplete="off"
+        placeholder="예: xxxxxxxx"
+        @focus="resetError">
       <ul class="validation-errors">
         <li v-if="!validation.password.required">패스워드가 입력되지 않았습니다</li>
       </ul>
@@ -71,7 +71,7 @@ export default {
     }
   },
 
-  data() {
+  data () {
     return {
       email: '',
       password: '',
@@ -81,7 +81,7 @@ export default {
   },
 
   computed: {
-    validation() {
+    validation () {
       return {
         email: {
           required: required(this.email),
@@ -93,12 +93,12 @@ export default {
       }
     },
 
-    valid() {
+    valid () {
       const validation = this.validation
       const fields = Object.keys(validation)
       let valid = true
       for (let i = 0; i < fields.length; i++) {
-        const field = fields[i];
+        const field = fields[i]
         valid = Object.keys(validation[field])
           .every(key => validation[field][key])
         if (!valid) {
@@ -108,17 +108,17 @@ export default {
       return valid
     },
 
-    disableLoginAction() {
+    disableLoginAction () {
       return !this.valid || this.progress
     }
   },
 
   methods: {
-    resetError() {
+    resetError () {
       this.error = ''
     },
 
-    handleCheck(ev) {
+    handleClick (ev) {
       if (this.disableLoginAction) { return }
 
       this.progress = true
@@ -129,12 +129,12 @@ export default {
           email: this.eamil,
           password: this.password
         })
-        .catch(err => {
-          this.error = err.message
-        })
-        .then(() => {
-          this.progress = false
-        })
+          .catch(err => {
+            this.error = err.message
+          })
+          .then(() => {
+            this.progress = false
+          })
       })
     }
   }
