@@ -126,7 +126,7 @@ export default {
 
       this.$nextTick(() => {
         this.onlogin({
-          email: this.eamil,
+          email: this.email,
           password: this.password
         })
           .catch(err => {
